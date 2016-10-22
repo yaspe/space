@@ -137,7 +137,7 @@ func (s *Ship) EngineMainDesable() {
 }
 
 func (s *Ship) EngineLeft() {
-	s.rotation_acc = enginePower / 20
+	s.rotation_acc = enginePower / 100
 }
 
 func (s *Ship) EngineLeftDesable() {
@@ -145,7 +145,7 @@ func (s *Ship) EngineLeftDesable() {
 }
 
 func (s *Ship) EngineRight() {
-	s.rotation_acc = -enginePower / 20
+	s.rotation_acc = -enginePower / 100
 }
 
 func (s *Ship) EngineRightDesable() {

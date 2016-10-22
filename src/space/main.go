@@ -6,14 +6,13 @@ import (
 )
 
 const (
-	enginePower = 0.25
-	maxSpeed    = 5
+	enginePower = 0.02
+	maxSpeed    = 2
 	worldSize   = 4000
 	frameSize   = 720
 )
 
 func ProcessControls(s *Ship) {
-	var keyDownPress bool
 	var keyLeftPress bool
 	var keyRightPress bool
 	for {
@@ -21,7 +20,7 @@ func ProcessControls(s *Ship) {
 		switch t := event.(type) {
 		case *sdl.KeyUpEvent:
 			if t.Keysym.Sym == 1073741905 {
-				keyDownPress = false
+				s.EngineMainDesable()
 			} else if t.Keysym.Sym == 1073741903 {
 				keyLeftPress = false
 			} else if t.Keysym.Sym == 1073741904 {
@@ -30,17 +29,12 @@ func ProcessControls(s *Ship) {
 		case *sdl.KeyDownEvent:
 			sdl.FlushEvent(sdl.KEYDOWN)
 			if t.Keysym.Sym == 1073741905 {
-				keyDownPress = true
+				s.EngineMain()
 			} else if t.Keysym.Sym == 1073741903 {
 				keyLeftPress = true
 			} else if t.Keysym.Sym == 1073741904 {
 				keyRightPress = true
 			}
-		}
-		if keyDownPress {
-			s.EngineMain()
-		} else {
-			s.EngineMainDesable()
 		}
 
 		if keyLeftPress && !keyRightPress {
@@ -71,19 +65,19 @@ func main() {
 	p1.size = 100
 	p1.position.x = 250
 	p1.position.y = 250
-	p1.speed = Vertex{x: 0.5, y: 0}
+	p1.speed = Vertex{x: 0.05, y: 0}
 
 	p2 := &Planet{}
 	p2.size = 125
 	p2.position.x = 1025
 	p2.position.y = 700
-	p2.speed = Vertex{x: -1, y: 0}
+	p2.speed = Vertex{x: -0.1, y: 0}
 
 	p3 := &Planet{}
 	p3.size = 70
 	p3.position.x = 3700
 	p3.position.y = 2700
-	p3.speed = Vertex{x: -0.5, y: 0}
+	p3.speed = Vertex{x: -0.05, y: 0}
 
 	objects := []IAbstractObject{}
 
@@ -95,10 +89,7 @@ func main() {
 		objects = append(objects, b)
 	}
 
-	objects = append(objects, p1)
-	objects = append(objects, p2)
-	objects = append(objects, p3)
-	objects = append(objects, s)
+	objects = append(objects, p1, p2, p3, s)
 
 	go ProcessControls(s)
 
@@ -109,6 +100,6 @@ func main() {
 			objects[i].Draw(renderer, s)
 		}
 		renderer.Present()
-		sdl.Delay(50)
+		sdl.Delay(5)
 	}
 }
