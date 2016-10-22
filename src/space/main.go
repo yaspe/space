@@ -19,8 +19,15 @@ func ProcessControls(s *Ship) {
 	}*/
 	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 		switch t := event.(type) {
+		case *sdl.KeyUpEvent:
+			if t.Keysym.Sym == 1073741905 {
+				s.EngineMainDesable()
+			} else if t.Keysym.Sym == 1073741903 {
+				s.EngineLeftDesable()
+			} else if t.Keysym.Sym == 1073741904 {
+				s.EngineRightDesable()
+			}
 		case *sdl.KeyDownEvent:
-			println(t.Keysym.Sym)
 			if t.Keysym.Sym == 1073741905 {
 				s.EngineMain()
 			} else if t.Keysym.Sym == 1073741903 {
@@ -134,12 +141,25 @@ func (s *Ship) EngineMain() {
 	s.acceleration.y = enginePower * math.Sin(s.rotation)
 }
 
+func (s *Ship) EngineMainDesable() {
+	s.acceleration.x = 0
+	s.acceleration.y = 0
+}
+
 func (s *Ship) EngineLeft() {
 	s.rotation_acc = enginePower / 10
 }
 
+func (s *Ship) EngineLeftDesable() {
+	s.rotation_acc = 0
+}
+
 func (s *Ship) EngineRight() {
 	s.rotation_acc = -enginePower / 10
+}
+
+func (s *Ship) EngineRightDesable() {
+	s.rotation_acc = 0
 }
 
 func (s *AbstractObject) Process() {
@@ -172,10 +192,6 @@ func (s *AbstractObject) Process() {
 
 	s.rotation_speed += s.rotation_acc
 	s.rotation += s.rotation_speed
-
-	s.acceleration.x = 0
-	s.acceleration.y = 0
-	s.rotation_acc = 0
 }
 
 // class Ship
