@@ -12,6 +12,10 @@ const (
 	worldSize   = 480
 )
 
+var keyDownPress bool
+var keyLeftPress bool
+var keyRightPress bool
+
 func ProcessControls(s *Ship) {
 	/*event := sdl.PollEvent()
 	if event == nil {
@@ -21,21 +25,35 @@ func ProcessControls(s *Ship) {
 		switch t := event.(type) {
 		case *sdl.KeyUpEvent:
 			if t.Keysym.Sym == 1073741905 {
-				s.EngineMainDesable()
+				keyDownPress = false
 			} else if t.Keysym.Sym == 1073741903 {
-				s.EngineLeftDesable()
+				keyLeftPress = false
 			} else if t.Keysym.Sym == 1073741904 {
-				s.EngineRightDesable()
+				keyRightPress = false
 			}
 		case *sdl.KeyDownEvent:
 			if t.Keysym.Sym == 1073741905 {
-				s.EngineMain()
+				keyDownPress = true
 			} else if t.Keysym.Sym == 1073741903 {
-				s.EngineLeft()
+				keyLeftPress = true
 			} else if t.Keysym.Sym == 1073741904 {
-				s.EngineRight()
+				keyRightPress = true
 			}
 		}
+	}
+
+	if keyDownPress {
+		s.EngineMain()
+	} else {
+		s.EngineMainDesable()
+	}
+
+	if keyLeftPress && !keyRightPress {
+		s.EngineLeft()
+	} else if !keyLeftPress && keyRightPress {
+		s.EngineRight()
+	} else {
+		s.EngineRightDesable()
 	}
 }
 
