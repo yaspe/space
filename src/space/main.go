@@ -71,11 +71,19 @@ func main() {
 	s.position.x = 50
 	s.position.y = 50
 
+	p := &Planet{}
+	p.position.x = 250
+	p.position.y = 250
+
+	objects := [...]IAbstractObject{p, s}
+
 	for {
 		ProcessControls(s)
-		s.Process()
 		renderer.Clear()
-		s.Draw(renderer)
+		for i := range objects {
+			objects[i].Process()
+			objects[i].Draw(renderer)
+		}
 		renderer.Present()
 		sdl.Delay(50)
 	}
@@ -99,7 +107,10 @@ type AbstractObject struct {
 
 type IAbstractObject interface {
 	Process()
+	Draw(renderer *sdl.Renderer)
 }
+
+// class Ship
 
 type Ship struct {
 	AbstractObject
@@ -109,6 +120,7 @@ func (s *Ship) Draw(renderer *sdl.Renderer) {
 	const half_size = 32
 
 	renderer.SetDrawColor(0, 255, 255, 255)
+
 	renderer.DrawLine(
 		int(s.position.x),
 		int(s.position.y),
@@ -198,4 +210,24 @@ func (s *AbstractObject) Process() {
 
 	s.rotation_speed += s.rotation_acc
 	s.rotation += s.rotation_speed
+}
+
+// class Ship
+
+type Planet struct {
+	AbstractObject
+}
+
+func (p *Planet) Draw(renderer *sdl.Renderer) {
+	renderer.SetDrawColor(0xe3, 0xf3, 0xff, 255)
+	const r = 100
+	for i := 0; i <= 314*2; i++ {
+		renderer.DrawLine(
+			int(p.position.x),
+			int(p.position.y),
+			int(p.position.x+r*math.Cos(float64(i)/100)),
+			int(p.position.y+r*math.Sin(float64(i)/100)),
+		)
+	}
+	renderer.SetDrawColor(0, 0, 0, 0)
 }
