@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/veandco/go-sdl2/sdl"
 	"math"
+	//"time"
 )
 
 const (
@@ -11,20 +12,43 @@ const (
 	worldSize   = 480
 )
 
+func ProcessControls(s *Ship) {
+	/*event := sdl.PollEvent()
+	if event == nil {
+		return
+	}*/
+	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+		switch t := event.(type) {
+		case *sdl.KeyDownEvent:
+			println(t.Keysym.Sym)
+			if t.Keysym.Sym == 1073741905 {
+				s.EngineMain()
+			} else if t.Keysym.Sym == 1073741903 {
+				s.EngineLeft()
+			} else if t.Keysym.Sym == 1073741904 {
+				s.EngineRight()
+			}
+		}
+	}
+}
+
 func main() {
+	sdl.Init(sdl.INIT_EVERYTHING)
 	window, _ := sdl.CreateWindow("Omg tittle", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
 		640, 480, sdl.WINDOW_SHOWN)
 	defer window.Destroy()
 	renderer, _ := sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
 	defer renderer.Destroy()
 
+	sdl.JoystickEventState(sdl.ENABLE)
+
 	s := &Ship{}
 	s.position.x = 50
 	s.position.y = 50
 
 	for {
+		ProcessControls(s)
 		s.Process()
-		s.EngineMain()
 		renderer.Clear()
 		s.Draw(renderer)
 		renderer.Present()
@@ -38,12 +62,14 @@ type Vertex struct {
 }
 
 type AbstractObject struct {
-	mass         uint64
-	hp           uint
-	position     Vertex
-	speed        Vertex
-	acceleration Vertex
-	rotation     float64
+	mass           uint64
+	hp             uint
+	position       Vertex
+	speed          Vertex
+	acceleration   Vertex
+	rotation       float64
+	rotation_speed float64
+	rotation_acc   float64
 }
 
 type IAbstractObject interface {
@@ -57,7 +83,6 @@ type Ship struct {
 func (s *Ship) Draw(renderer *sdl.Renderer) {
 	const half_size = 32
 
-	s.rotation = 1.3
 	renderer.SetDrawColor(0, 255, 255, 255)
 	renderer.DrawLine(
 		int(s.position.x),
@@ -97,6 +122,14 @@ func (s *Ship) EngineMain() {
 	s.acceleration.y = enginePower * math.Sin(s.rotation)
 }
 
+func (s *Ship) EngineLeft() {
+	s.rotation_acc = enginePower / 10
+}
+
+func (s *Ship) EngineRight() {
+	s.rotation_acc = -enginePower / 10
+}
+
 func (s *AbstractObject) Process() {
 
 	s.speed.x += s.acceleration.x
@@ -124,4 +157,11 @@ func (s *AbstractObject) Process() {
 	} else if s.position.y < 0 {
 		s.position.y = worldSize
 	}
+
+	s.rotation_speed += s.rotation_acc
+	s.rotation += s.rotation_speed
+
+	s.acceleration.x = 0
+	s.acceleration.y = 0
+	s.rotation_acc = 0
 }
