@@ -9,7 +9,7 @@ const (
 	enginePower = 0.25
 	maxSpeed    = 5
 	worldSize   = 4000
-	frameSize   = 600
+	frameSize   = 720
 )
 
 func ProcessControls(s *Ship) {
@@ -71,19 +71,19 @@ func main() {
 	p1.size = 100
 	p1.position.x = 250
 	p1.position.y = 250
-	p1.speed = Vertex{x: 0.05, y: 0}
+	p1.speed = Vertex{x: 0.5, y: 0}
 
 	p2 := &Planet{}
 	p2.size = 125
 	p2.position.x = 1025
 	p2.position.y = 700
-	p2.speed = Vertex{x: -0.1, y: 0}
+	p2.speed = Vertex{x: -1, y: 0}
 
 	p3 := &Planet{}
 	p3.size = 70
 	p3.position.x = 3700
 	p3.position.y = 2700
-	p3.speed = Vertex{x: -0.05, y: 0}
+	p3.speed = Vertex{x: -0.5, y: 0}
 
 	objects := []IAbstractObject{}
 
@@ -91,7 +91,7 @@ func main() {
 		b := &BgStar{}
 		b.position.x = float64(rand.Intn(worldSize))
 		b.position.y = float64(rand.Intn(worldSize))
-		b.size = 2
+		b.size = uint(rand.Intn(3)) + 1
 		objects = append(objects, b)
 	}
 

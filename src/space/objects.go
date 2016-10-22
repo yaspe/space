@@ -91,7 +91,7 @@ func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 		)
 	}
 
-	renderer.SetDrawColor(0, 255, 255, 255)
+	renderer.SetDrawColor(0, 70, 70, 70)
 	renderer.DrawLine(
 		int(inFramePosition.x),
 		int(inFramePosition.y),
