@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/veandco/go-sdl2/sdl"
+	"math/rand"
 )
 
 const (
@@ -53,21 +54,37 @@ func main() {
 	s.position.y = 50
 
 	p1 := &Planet{}
+	p1.size = 100
 	p1.position.x = 250
 	p1.position.y = 250
 	p1.speed = Vertex{x: 0.05, y: 0}
 
 	p2 := &Planet{}
+	p2.size = 125
 	p2.position.x = 1025
 	p2.position.y = 700
 	p2.speed = Vertex{x: -0.1, y: 0}
 
 	p3 := &Planet{}
+	p3.size = 70
 	p3.position.x = 3700
 	p3.position.y = 2700
 	p3.speed = Vertex{x: -0.05, y: 0}
 
-	objects := [...]IAbstractObject{p1, p2, p3, s}
+	objects := []IAbstractObject{}
+
+	for i := 0; i <= 10000; i++ {
+		b := &BgStar{}
+		b.position.x = float64(rand.Intn(worldSize))
+		b.position.y = float64(rand.Intn(worldSize))
+		b.size = 2
+		objects = append(objects, b)
+	}
+
+	objects = append(objects, p1)
+	objects = append(objects, p2)
+	objects = append(objects, p3)
+	objects = append(objects, s)
 
 	for {
 		ProcessControls(s)

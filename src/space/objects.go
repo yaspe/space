@@ -12,6 +12,7 @@ type Vertex struct {
 
 type AbstractObject struct {
 	mass           uint64
+	size           uint
 	hp             uint
 	position       Vertex
 	speed          Vertex
@@ -35,13 +36,39 @@ type Ship struct {
 func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 	const half_size = 32
 
-	renderer.SetDrawColor(0, 255, 255, 255)
-
 	inFramePosition := &Vertex{
 		x: frameSize / 2,
 		y: frameSize / 2,
 	}
 
+	if s.acceleration.x != 0 || s.acceleration.y != 0 {
+		DrawEllipse(
+			7, 225, 20, 20,
+			&Vertex{
+				x: inFramePosition.x - 5*math.Cos(s.rotation),
+				y: inFramePosition.y - 5*math.Sin(s.rotation),
+			},
+			renderer,
+		)
+	}
+
+	renderer.SetDrawColor(9, 22, 79, 255)
+	for i := 0; i <= 50; i++ {
+		renderer.DrawLine(
+			int(inFramePosition.x+half_size*math.Cos(s.rotation)),
+			int(inFramePosition.y+half_size*math.Sin(s.rotation)),
+			int(inFramePosition.x-float64(i)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+			int(inFramePosition.y+float64(i)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+		)
+		renderer.DrawLine(
+			int(inFramePosition.x+half_size*math.Cos(s.rotation)),
+			int(inFramePosition.y+half_size*math.Sin(s.rotation)),
+			int(inFramePosition.x+float64(i)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+			int(inFramePosition.y+float64(i)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+		)
+	}
+
+	renderer.SetDrawColor(0, 255, 255, 255)
 	renderer.DrawLine(
 		int(inFramePosition.x),
 		int(inFramePosition.y),
@@ -72,6 +99,7 @@ func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 		int(inFramePosition.x-half_size*math.Sin(s.rotation+3*math.Pi/4)),
 		int(inFramePosition.y+half_size*math.Cos(s.rotation+3*math.Pi/4)),
 	)
+
 	renderer.SetDrawColor(0, 0, 0, 0)
 }
 
@@ -140,21 +168,15 @@ type Planet struct {
 }
 
 func (p *Planet) Draw(renderer *sdl.Renderer, s *Ship) {
-	renderer.SetDrawColor(0xe3, 0xf3, 0xff, 255)
-	const r = 100
-
 	inFramePosition := &Vertex{
 		x: p.position.x - s.position.x + frameSize/2,
 		y: p.position.y - s.position.y + frameSize/2,
 	}
 
-	for i := 0; i <= 314*2; i++ {
-		renderer.DrawLine(
-			int(inFramePosition.x),
-			int(inFramePosition.y),
-			int(inFramePosition.x+r*math.Cos(float64(i)/100)),
-			int(inFramePosition.y+r*math.Sin(float64(i)/100)),
-		)
+	if inFramePosition.x+float64(p.size) < 0 || inFramePosition.x-float64(p.size) > frameSize || inFramePosition.y+float64(p.size) < 0 || inFramePosition.y-float64(p.size) > frameSize {
+		return
 	}
+
+	DrawEllipse(p.size, 0xe3, 0xf3, 0xff, inFramePosition, renderer)
 	renderer.SetDrawColor(0, 0, 0, 0)
 }
