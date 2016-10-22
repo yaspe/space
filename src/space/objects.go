@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/veandco/go-sdl2/sdl"
 	"math"
+	"math/rand"
 )
 
 type Vertex struct {
@@ -41,15 +42,37 @@ func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 		y: frameSize / 2,
 	}
 
+	renderer.SetDrawColor(225, 20, 20, 255)
+	const flame_len = 15
 	if s.acceleration.x != 0 || s.acceleration.y != 0 {
-		DrawEllipse(
-			7, 225, 20, 20,
-			&Vertex{
-				x: inFramePosition.x - 5*math.Cos(s.rotation),
-				y: inFramePosition.y - 5*math.Sin(s.rotation),
-			},
-			renderer,
-		)
+		for i := 0; i <= 50; i++ {
+			renderer.DrawLine(
+				int(inFramePosition.x),
+				int(inFramePosition.y),
+				int(inFramePosition.x-flame_len*math.Cos(s.rotation))+5-rand.Intn(10),
+				int(inFramePosition.y-flame_len*math.Sin(s.rotation))+5-rand.Intn(10),
+			)
+		}
+	}
+
+	if s.rotation_acc != 0 {
+		for i := 0; i <= 50; i++ {
+			if s.rotation_acc < 0 {
+				renderer.DrawLine(
+					int(inFramePosition.x+half_size*math.Cos(s.rotation+3*math.Pi/4)),
+					int(inFramePosition.y+half_size*math.Sin(s.rotation+3*math.Pi/4)),
+					int(inFramePosition.x+half_size*math.Cos(s.rotation+3*math.Pi/4))+5-rand.Intn(10),
+					int(inFramePosition.y+half_size*math.Sin(s.rotation+3*math.Pi/4))+5-rand.Intn(10),
+				)
+			} else {
+				renderer.DrawLine(
+					int(inFramePosition.x-half_size*math.Sin(s.rotation+3*math.Pi/4)),
+					int(inFramePosition.y+half_size*math.Cos(s.rotation+3*math.Pi/4)),
+					int(inFramePosition.x-half_size*math.Sin(s.rotation+3*math.Pi/4))+5-rand.Intn(10),
+					int(inFramePosition.y+half_size*math.Cos(s.rotation+3*math.Pi/4))+5-rand.Intn(10),
+				)
+			}
+		}
 	}
 
 	renderer.SetDrawColor(9, 22, 79, 255)

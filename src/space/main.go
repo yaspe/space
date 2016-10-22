@@ -28,7 +28,7 @@ func ProcessControls(s *Ship) {
 				keyRightPress = false
 			}
 		case *sdl.KeyDownEvent:
-			//sdl.FlushEvent(sdl.KEYDOWN)
+			sdl.FlushEvent(sdl.KEYDOWN)
 			if t.Keysym.Sym == 1073741905 {
 				keyDownPress = true
 			} else if t.Keysym.Sym == 1073741903 {
