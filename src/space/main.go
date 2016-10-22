@@ -6,37 +6,34 @@ import (
 )
 
 const (
-	enginePower = 0.05
-	maxSpeed    = 15
+	enginePower = 0.25
+	maxSpeed    = 5
 	worldSize   = 4000
 	frameSize   = 600
 )
 
 func ProcessControls(s *Ship) {
-	/*event := sdl.PollEvent()
-	if event == nil {
-		return
-	}*/
-	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-		switch t := event.(type) {
-		case *sdl.KeyUpEvent:
-			if t.Keysym.Sym == 1073741905 {
-				s.EngineMainDesable()
-			} else if t.Keysym.Sym == 1073741903 {
-				s.EngineLeftDesable()
-			} else if t.Keysym.Sym == 1073741904 {
-				s.EngineRightDesable()
-			}
-		case *sdl.KeyDownEvent:
-			if t.Keysym.Sym == 1073741905 {
-				s.EngineMain()
-			} else if t.Keysym.Sym == 1073741903 {
-				s.EngineLeft()
-			} else if t.Keysym.Sym == 1073741904 {
-				s.EngineRight()
-			}
+	event := sdl.PollEvent()
+	switch t := event.(type) {
+	case *sdl.KeyUpEvent:
+		if t.Keysym.Sym == 1073741905 {
+			s.EngineMainDesable()
+		} else if t.Keysym.Sym == 1073741903 {
+			s.EngineLeftDesable()
+		} else if t.Keysym.Sym == 1073741904 {
+			s.EngineRightDesable()
+		}
+	case *sdl.KeyDownEvent:
+		sdl.FlushEvent(sdl.KEYDOWN)
+		if t.Keysym.Sym == 1073741905 {
+			s.EngineMain()
+		} else if t.Keysym.Sym == 1073741903 {
+			s.EngineLeft()
+		} else if t.Keysym.Sym == 1073741904 {
+			s.EngineRight()
 		}
 	}
+
 }
 
 func main() {
