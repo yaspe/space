@@ -13,27 +13,44 @@ const (
 )
 
 func ProcessControls(s *Ship) {
-	event := sdl.PollEvent()
-	switch t := event.(type) {
-	case *sdl.KeyUpEvent:
-		if t.Keysym.Sym == 1073741905 {
+	var keyDownPress bool
+	var keyLeftPress bool
+	var keyRightPress bool
+	for {
+		event := sdl.PollEvent()
+		switch t := event.(type) {
+		case *sdl.KeyUpEvent:
+			if t.Keysym.Sym == 1073741905 {
+				keyDownPress = false
+			} else if t.Keysym.Sym == 1073741903 {
+				keyLeftPress = false
+			} else if t.Keysym.Sym == 1073741904 {
+				keyRightPress = false
+			}
+		case *sdl.KeyDownEvent:
+			//sdl.FlushEvent(sdl.KEYDOWN)
+			if t.Keysym.Sym == 1073741905 {
+				keyDownPress = true
+			} else if t.Keysym.Sym == 1073741903 {
+				keyLeftPress = true
+			} else if t.Keysym.Sym == 1073741904 {
+				keyRightPress = true
+			}
+		}
+		if keyDownPress {
+			s.EngineMain()
+		} else {
 			s.EngineMainDesable()
-		} else if t.Keysym.Sym == 1073741903 {
-			s.EngineLeftDesable()
-		} else if t.Keysym.Sym == 1073741904 {
+		}
+
+		if keyLeftPress && !keyRightPress {
+			s.EngineLeft()
+		} else if !keyLeftPress && keyRightPress {
+			s.EngineRight()
+		} else {
 			s.EngineRightDesable()
 		}
-	case *sdl.KeyDownEvent:
-		sdl.FlushEvent(sdl.KEYDOWN)
-		if t.Keysym.Sym == 1073741905 {
-			s.EngineMain()
-		} else if t.Keysym.Sym == 1073741903 {
-			s.EngineLeft()
-		} else if t.Keysym.Sym == 1073741904 {
-			s.EngineRight()
-		}
 	}
-
 }
 
 func main() {
@@ -83,8 +100,9 @@ func main() {
 	objects = append(objects, p3)
 	objects = append(objects, s)
 
+	go ProcessControls(s)
+
 	for {
-		ProcessControls(s)
 		renderer.Clear()
 		for i := range objects {
 			objects[i].Process()

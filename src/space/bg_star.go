@@ -10,23 +10,7 @@ type BgStar struct {
 }
 
 func (b *BgStar) Draw(renderer *sdl.Renderer, s *Ship) {
-	inFramePosition := &Vertex{
-		x: b.position.x - s.position.x + frameSize/2,
-		y: b.position.y - s.position.y + frameSize/2,
-	}
-
-	if inFramePosition.x > worldSize {
-		inFramePosition.x = inFramePosition.x - worldSize
-	}
-	if inFramePosition.y > worldSize {
-		inFramePosition.y = inFramePosition.y - worldSize
-	}
-	if s.position.x > worldSize-frameSize/2 && b.position.x < frameSize/2 {
-		inFramePosition.x = worldSize + b.position.x - s.position.x + frameSize/2
-	}
-	if s.position.y > worldSize-frameSize/2 && b.position.y < frameSize/2 {
-		inFramePosition.y = worldSize + b.position.y - s.position.y + frameSize/2
-	}
+	inFramePosition := RelalculatePos(&b.position, s)
 
 	if inFramePosition.x < 0 || inFramePosition.x > frameSize || inFramePosition.y < 0 || inFramePosition.y > frameSize {
 		return

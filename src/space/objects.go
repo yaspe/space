@@ -114,7 +114,7 @@ func (s *Ship) EngineMainDesable() {
 }
 
 func (s *Ship) EngineLeft() {
-	s.rotation_acc = enginePower / 10
+	s.rotation_acc = enginePower / 20
 }
 
 func (s *Ship) EngineLeftDesable() {
@@ -122,7 +122,7 @@ func (s *Ship) EngineLeftDesable() {
 }
 
 func (s *Ship) EngineRight() {
-	s.rotation_acc = -enginePower / 10
+	s.rotation_acc = -enginePower / 20
 }
 
 func (s *Ship) EngineRightDesable() {
@@ -161,17 +161,14 @@ func (s *AbstractObject) Process() {
 	s.rotation += s.rotation_speed
 }
 
-// class Ship
+// class Planet
 
 type Planet struct {
 	AbstractObject
 }
 
 func (p *Planet) Draw(renderer *sdl.Renderer, s *Ship) {
-	inFramePosition := &Vertex{
-		x: p.position.x - s.position.x + frameSize/2,
-		y: p.position.y - s.position.y + frameSize/2,
-	}
+	inFramePosition := RelalculatePos(&p.position, s)
 
 	if inFramePosition.x+float64(p.size) < 0 || inFramePosition.x-float64(p.size) > frameSize || inFramePosition.y+float64(p.size) < 0 || inFramePosition.y-float64(p.size) > frameSize {
 		return
