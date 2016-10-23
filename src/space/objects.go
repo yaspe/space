@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/sdl_gfx"
 	"math"
 	"math/rand"
 )
@@ -75,21 +76,26 @@ func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 		}
 	}
 
-	renderer.SetDrawColor(9, 22, 79, 255)
-	for i := 0; i <= 50; i++ {
-		renderer.DrawLine(
-			int(inFramePosition.x+half_size*math.Cos(s.rotation)),
-			int(inFramePosition.y+half_size*math.Sin(s.rotation)),
-			int(inFramePosition.x-float64(i)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
-			int(inFramePosition.y+float64(i)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
-		)
-		renderer.DrawLine(
-			int(inFramePosition.x+half_size*math.Cos(s.rotation)),
-			int(inFramePosition.y+half_size*math.Sin(s.rotation)),
-			int(inFramePosition.x+float64(i)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
-			int(inFramePosition.y+float64(i)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
-		)
-	}
+	gfx.FilledTrigonRGBA(renderer,
+		int(inFramePosition.x+half_size*math.Cos(s.rotation)),
+		int(inFramePosition.y+half_size*math.Sin(s.rotation)),
+		int(inFramePosition.x-float64(0)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.y+float64(0)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.x-float64(50)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.y+float64(50)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+		9, 22, 79, 255,
+	)
+
+	gfx.FilledTrigonRGBA(renderer,
+		int(inFramePosition.x+half_size*math.Cos(s.rotation)),
+		int(inFramePosition.y+half_size*math.Sin(s.rotation)),
+		int(inFramePosition.x+float64(0)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.y+float64(0)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.x+float64(50)*half_size*math.Cos(s.rotation+3*math.Pi/4)/50),
+		int(inFramePosition.y+float64(50)*half_size*math.Sin(s.rotation+3*math.Pi/4)/50),
+		9, 22, 79, 255,
+	)
+
 
 	renderer.SetDrawColor(0, 70, 70, 70)
 	renderer.DrawLine(
