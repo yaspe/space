@@ -15,12 +15,13 @@ const (
 func ProcessControls(s *Ship) {
 	var keyLeftPress bool
 	var keyRightPress bool
+	var keyDownPress bool
 	for {
 		event := sdl.PollEvent()
 		switch t := event.(type) {
 		case *sdl.KeyUpEvent:
 			if t.Keysym.Sym == 1073741905 {
-				s.EngineMainDesable()
+				keyDownPress = false
 			} else if t.Keysym.Sym == 1073741903 {
 				keyLeftPress = false
 			} else if t.Keysym.Sym == 1073741904 {
@@ -29,12 +30,18 @@ func ProcessControls(s *Ship) {
 		case *sdl.KeyDownEvent:
 			sdl.FlushEvent(sdl.KEYDOWN)
 			if t.Keysym.Sym == 1073741905 {
-				s.EngineMain()
+				keyDownPress = true
 			} else if t.Keysym.Sym == 1073741903 {
 				keyLeftPress = true
 			} else if t.Keysym.Sym == 1073741904 {
 				keyRightPress = true
 			}
+		}
+
+		if keyDownPress {
+			s.EngineMain()
+		} else {
+			s.EngineMainDesable()
 		}
 
 		if keyLeftPress && !keyRightPress {
