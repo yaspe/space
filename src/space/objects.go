@@ -96,7 +96,6 @@ func (s *Ship) Draw(renderer *sdl.Renderer, ss *Ship) {
 		9, 22, 79, 255,
 	)
 
-
 	renderer.SetDrawColor(0, 70, 70, 70)
 	renderer.DrawLine(
 		int(inFramePosition.x),
@@ -204,5 +203,11 @@ func (p *Planet) Draw(renderer *sdl.Renderer, s *Ship) {
 	}
 
 	DrawEllipse(p.size, 0xe3, 0xf3, 0xff, inFramePosition, renderer)
+
+	craterPosition := inFramePosition
+	craterPosition.x = inFramePosition.x + float64(p.size)/2*math.Sin(p.rotation)
+	craterPosition.y = inFramePosition.y + float64(p.size)/2*math.Cos(p.rotation)
+	DrawEllipse(3, 0, 0, 0, craterPosition, renderer)
+
 	renderer.SetDrawColor(0, 0, 0, 0)
 }
