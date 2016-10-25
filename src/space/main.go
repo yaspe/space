@@ -80,7 +80,7 @@ func main() {
 		p := &Planet{}
 		p.size = 50 + uint(rand.Intn(100))
 		p.mass = 40000
-		p.position.x = 200 //float64(rand.Intn(worldSize))
+		p.position.x = float64(rand.Intn(worldSize))
 		p.position.y = float64(i)
 		p.speed = Vertex{x: float64(100-rand.Intn(200)) / 10000, y: 0}
 		p.rotation_speed = 0.002
@@ -101,7 +101,7 @@ func main() {
 			objectsBG[i].Draw(renderer, s)
 		}
 		for i := range objects {
-			objects[i].ApplyGravity()
+			objects[i].ApplyGravity(s)
 			objects[i].Process()
 			objects[i].Draw(renderer, s)
 		}

@@ -28,8 +28,8 @@ type AbstractObject struct {
 
 type IAbstractObject interface {
 	Process()
-	ApplyGravity()
-	GetPosition() Vertex
+	ApplyGravity(s *Ship)
+	GetPosition() *Vertex
 	GetMass() float64
 	Draw(renderer *sdl.Renderer, s *Ship)
 }
@@ -197,13 +197,13 @@ func (s *AbstractObject) Process() {
 	s.rotation += s.rotation_speed
 }
 
-func (o *AbstractObject) ApplyGravity() {
+func (o *AbstractObject) ApplyGravity(s *Ship) {
 
 	if o.GetMass() == 40000 {
 		return
 	}
 
-	currPoss := o.GetPosition()
+	currPoss := RelalculatePos(o.GetPosition(), s)
 	o.gravity.x = 0
 	o.gravity.y = 0
 
@@ -213,7 +213,7 @@ func (o *AbstractObject) ApplyGravity() {
 			continue
 		}
 
-		objPoss := obj.GetPosition()
+		objPoss := RelalculatePos(obj.GetPosition(), s)
 
 		distanceX := currPoss.x - objPoss.x
 		distanceY := currPoss.y - objPoss.y
@@ -235,8 +235,8 @@ func (o *AbstractObject) ApplyGravity() {
 	}
 }
 
-func (o *AbstractObject) GetPosition() Vertex {
-	return o.position
+func (o *AbstractObject) GetPosition() *Vertex {
+	return &o.position
 }
 
 func (o *AbstractObject) GetMass() float64 {
