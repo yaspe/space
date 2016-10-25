@@ -223,9 +223,9 @@ func (o *AbstractObject) ApplyGravity() {
 			distance = 100
 		}
 
-		gx := Sign(distanceX) * G * obj.GetMass() / (distance * distance)
-		gy := Sign(distanceY) * G * obj.GetMass() / (distance * distance)
-
+		g := G * obj.GetMass() / (distance * distance)
+		gx := distanceX * g / distance
+		gy := distanceY * g / distance
 		o.gravity.x += gx
 		o.gravity.y += gy
 	}
