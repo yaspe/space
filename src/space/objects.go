@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/sdl_gfx"
 	"math"
 	"math/rand"
+
+	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/sdl_gfx"
 )
 
 type Vertex struct {
@@ -13,12 +14,13 @@ type Vertex struct {
 }
 
 type AbstractObject struct {
-	mass           uint64
+	mass           float64
 	size           uint
 	hp             uint
 	position       Vertex
 	speed          Vertex
 	acceleration   Vertex
+	gravity        Vertex
 	rotation       float64
 	rotation_speed float64
 	rotation_acc   float64
@@ -26,6 +28,9 @@ type AbstractObject struct {
 
 type IAbstractObject interface {
 	Process()
+	ApplyGravity()
+	GetPosition() Vertex
+	GetMass() float64
 	Draw(renderer *sdl.Renderer, s *Ship)
 }
 
@@ -170,6 +175,9 @@ func (s *AbstractObject) Process() {
 		s.speed.y = maxSpeed
 	}
 
+	s.speed.x -= s.gravity.x
+	s.speed.y -= s.gravity.y
+
 	s.position.x += s.speed.x
 	s.position.y += s.speed.y
 
@@ -187,6 +195,43 @@ func (s *AbstractObject) Process() {
 
 	s.rotation_speed += s.rotation_acc
 	s.rotation += s.rotation_speed
+}
+
+func (o *AbstractObject) ApplyGravity() {
+
+	if o.GetMass() == 40000 {
+		return
+	}
+
+	currPoss := o.GetPosition()
+	o.gravity.x = 0
+	o.gravity.y = 0
+
+	for _, obj := range objects {
+
+		if obj.GetMass() == 1 {
+			continue
+		}
+
+		objPoss := obj.GetPosition()
+
+		distanceX := currPoss.x - objPoss.x
+		distanceY := currPoss.y - objPoss.y
+
+		gx := (G * obj.GetMass() * distanceX) / math.Pow(math.Sqrt(math.Pow(distanceX, 2)+math.Pow(distanceY, 2)), 3)
+		gy := (G * obj.GetMass() * distanceY) / math.Pow(math.Sqrt(math.Pow(distanceY, 2)+math.Pow(distanceX, 2)), 3)
+
+		o.gravity.x += gx
+		o.gravity.y += gy
+	}
+}
+
+func (o *AbstractObject) GetPosition() Vertex {
+	return o.position
+}
+
+func (o *AbstractObject) GetMass() float64 {
+	return o.mass
 }
 
 // class Planet

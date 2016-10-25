@@ -10,6 +10,7 @@ const (
 	maxSpeed    = 2
 	worldSize   = 4000
 	frameSize   = 720
+	G = 0.018
 )
 
 func ProcessControls(s *Ship) {
@@ -54,6 +55,8 @@ func ProcessControls(s *Ship) {
 	}
 }
 
+var objects []IAbstractObject
+
 func main() {
 	sdl.Init(sdl.INIT_EVERYTHING)
 	window, _ := sdl.CreateWindow("Omg tittle", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
@@ -65,11 +68,13 @@ func main() {
 	sdl.JoystickEventState(sdl.ENABLE)
 
 	s := &Ship{}
-	s.position.x = 50
-	s.position.y = 50
+	s.mass = 1
+	s.position.x = 5
+	s.position.y = 5
 
 	p1 := &Planet{}
 	p1.size = 100
+	p1.mass = 40000
 	p1.position.x = 250
 	p1.position.y = 250
 	p1.speed = Vertex{x: 0.05, y: 0}
@@ -77,6 +82,7 @@ func main() {
 
 	p2 := &Planet{}
 	p2.size = 125
+	p2.mass = 40000
 	p2.position.x = 1025
 	p2.position.y = 700
 	p2.speed = Vertex{x: -0.1, y: 0}
@@ -84,19 +90,21 @@ func main() {
 
 	p3 := &Planet{}
 	p3.size = 70
+	p3.mass = 40000
 	p3.position.x = 3700
 	p3.position.y = 2700
 	p3.speed = Vertex{x: -0.05, y: 0}
 	p3.rotation_speed = 0.005
 
-	objects := []IAbstractObject{}
+	objectsBG := []*BgStar{}
+	objects = []IAbstractObject{}
 
 	for i := 0; i <= 10000; i++ {
 		b := &BgStar{}
 		b.position.x = float64(rand.Intn(worldSize))
 		b.position.y = float64(rand.Intn(worldSize))
 		b.size = uint(rand.Intn(3)) + 1
-		objects = append(objects, b)
+		objectsBG = append(objectsBG, b)
 	}
 
 	objects = append(objects, p1, p2, p3, s)
@@ -105,10 +113,15 @@ func main() {
 
 	for {
 		renderer.Clear()
+		for i := range objectsBG {
+			objectsBG[i].Draw(renderer, s)
+		}
 		for i := range objects {
+			objects[i].ApplyGravity()
 			objects[i].Process()
 			objects[i].Draw(renderer, s)
 		}
+
 		renderer.Present()
 		sdl.Delay(5)
 	}
