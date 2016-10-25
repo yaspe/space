@@ -82,8 +82,8 @@ func main() {
 		p.mass = 40000
 		p.position.x = float64(rand.Intn(worldSize))
 		p.position.y = float64(i)
-		p.speed = Vertex{x: float64(100-rand.Intn(200)) / 10000, y: 0}
-		p.rotation_speed = 0.002
+		p.speed = Vertex{x: float64(100-rand.Intn(200)) / 1000, y: 0}
+		p.rotation_speed = float64(5-rand.Intn(10)) / 1000
 		objects = append(objects, p)
 	}
 

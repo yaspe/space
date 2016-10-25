@@ -223,7 +223,7 @@ func (o *AbstractObject) ApplyGravity(s *Ship) {
 			distance = 100
 		}
 
-		if distance > frameSize*3 {
+		if distance > frameSize {
 			continue
 		}
 
