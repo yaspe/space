@@ -10,7 +10,7 @@ const (
 	maxSpeed    = 2
 	worldSize   = 4000
 	frameSize   = 720
-	G = 0.018
+	G           = 0.005
 )
 
 func ProcessControls(s *Ship) {

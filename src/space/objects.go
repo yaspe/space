@@ -218,8 +218,13 @@ func (o *AbstractObject) ApplyGravity() {
 		distanceX := currPoss.x - objPoss.x
 		distanceY := currPoss.y - objPoss.y
 
-		gx := (G * obj.GetMass() * distanceX) / math.Pow(math.Sqrt(math.Pow(distanceX, 2)+math.Pow(distanceY, 2)), 3)
-		gy := (G * obj.GetMass() * distanceY) / math.Pow(math.Sqrt(math.Pow(distanceY, 2)+math.Pow(distanceX, 2)), 3)
+		distance := math.Sqrt(math.Pow(distanceX, 2) + math.Pow(distanceY, 2))
+		if distance < 100 {
+			distance = 100
+		}
+
+		gx := Sign(distanceX) * G * obj.GetMass() / (distance * distance)
+		gy := Sign(distanceY) * G * obj.GetMass() / (distance * distance)
 
 		o.gravity.x += gx
 		o.gravity.y += gy

@@ -9,6 +9,13 @@ func DrawEllipse(radius uint, r, g, b uint8, position *Vertex, renderer *sdl.Ren
 	gfx.FilledCircleRGBA(renderer, int(position.x), int(position.y), int(radius), r, g, b, 0xFF)
 }
 
+func Sign(a float64) float64 {
+	if a > 0 {
+		return 1
+	}
+	return -1
+}
+
 func RelalculatePos(pos *Vertex, s *Ship) *Vertex {
 	inFramePosition := &Vertex{
 		x: pos.x - s.position.x + frameSize/2,
