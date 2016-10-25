@@ -223,6 +223,10 @@ func (o *AbstractObject) ApplyGravity() {
 			distance = 100
 		}
 
+		if distance > frameSize*3 {
+			continue
+		}
+
 		g := G * obj.GetMass() / (distance * distance)
 		gx := distanceX * g / distance
 		gy := distanceY * g / distance

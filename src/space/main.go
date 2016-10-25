@@ -67,38 +67,7 @@ func main() {
 
 	sdl.JoystickEventState(sdl.ENABLE)
 
-	s := &Ship{}
-	s.mass = 1
-	s.position.x = 5
-	s.position.y = 5
-
-	p1 := &Planet{}
-	p1.size = 100
-	p1.mass = 40000
-	p1.position.x = 250
-	p1.position.y = 250
-	p1.speed = Vertex{x: 0.05, y: 0}
-	p1.rotation_speed = 0.002
-
-	p2 := &Planet{}
-	p2.size = 125
-	p2.mass = 40000
-	p2.position.x = 1025
-	p2.position.y = 700
-	p2.speed = Vertex{x: -0.1, y: 0}
-	p2.rotation_speed = -0.005
-
-	p3 := &Planet{}
-	p3.size = 70
-	p3.mass = 40000
-	p3.position.x = 3700
-	p3.position.y = 2700
-	p3.speed = Vertex{x: -0.05, y: 0}
-	p3.rotation_speed = 0.005
-
 	objectsBG := []*BgStar{}
-	objects = []IAbstractObject{}
-
 	for i := 0; i <= 10000; i++ {
 		b := &BgStar{}
 		b.position.x = float64(rand.Intn(worldSize))
@@ -107,7 +76,22 @@ func main() {
 		objectsBG = append(objectsBG, b)
 	}
 
-	objects = append(objects, p1, p2, p3, s)
+	for i := 0; i < worldSize; i += 500 {
+		p := &Planet{}
+		p.size = 50 + uint(rand.Intn(100))
+		p.mass = 40000
+		p.position.x = 200 //float64(rand.Intn(worldSize))
+		p.position.y = float64(i)
+		p.speed = Vertex{x: float64(100-rand.Intn(200)) / 10000, y: 0}
+		p.rotation_speed = 0.002
+		objects = append(objects, p)
+	}
+
+	s := &Ship{}
+	s.mass = 1
+	s.position.x = 5
+	s.position.y = 5
+	objects = append(objects, s)
 
 	go ProcessControls(s)
 
