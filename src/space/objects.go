@@ -8,11 +8,6 @@ import (
 	"github.com/veandco/go-sdl2/sdl_gfx"
 )
 
-type Vertex struct {
-	x float64
-	y float64
-}
-
 type AbstractObject struct {
 	mass           float64
 	size           uint
@@ -147,7 +142,7 @@ func (s *Ship) EngineMainDesable() {
 }
 
 func (s *Ship) EngineLeft() {
-	s.rotation_acc = enginePower / 100
+	s.rotation_acc = enginePower / 35
 }
 
 func (s *Ship) EngineLeftDesable() {
@@ -155,7 +150,7 @@ func (s *Ship) EngineLeftDesable() {
 }
 
 func (s *Ship) EngineRight() {
-	s.rotation_acc = -enginePower / 100
+	s.rotation_acc = -enginePower / 35
 }
 
 func (s *Ship) EngineRightDesable() {

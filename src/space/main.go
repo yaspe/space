@@ -6,54 +6,13 @@ import (
 )
 
 const (
-	enginePower = 0.02
-	maxSpeed    = 2
+	enginePower = 0.05
+	maxSpeed    = 10
 	worldSize   = 4000
 	frameSize   = 720
 	G           = 0.005
+	frameRate   = 60
 )
-
-func ProcessControls(s *Ship) {
-	var keyLeftPress bool
-	var keyRightPress bool
-	var keyDownPress bool
-	for {
-		event := sdl.PollEvent()
-		switch t := event.(type) {
-		case *sdl.KeyUpEvent:
-			if t.Keysym.Sym == 1073741905 {
-				keyDownPress = false
-			} else if t.Keysym.Sym == 1073741903 {
-				keyLeftPress = false
-			} else if t.Keysym.Sym == 1073741904 {
-				keyRightPress = false
-			}
-		case *sdl.KeyDownEvent:
-			sdl.FlushEvent(sdl.KEYDOWN)
-			if t.Keysym.Sym == 1073741905 {
-				keyDownPress = true
-			} else if t.Keysym.Sym == 1073741903 {
-				keyLeftPress = true
-			} else if t.Keysym.Sym == 1073741904 {
-				keyRightPress = true
-			}
-		}
-
-		if keyDownPress {
-			s.EngineMain()
-		} else {
-			s.EngineMainDesable()
-		}
-
-		if keyLeftPress && !keyRightPress {
-			s.EngineLeft()
-		} else if !keyLeftPress && keyRightPress {
-			s.EngineRight()
-		} else {
-			s.EngineRightDesable()
-		}
-	}
-}
 
 var objects []IAbstractObject
 
@@ -96,7 +55,24 @@ func main() {
 	go ProcessControls(s)
 
 	for {
+
+		controlMutex.Lock()
+		if keyDownPress {
+			s.EngineMain()
+		} else {
+			s.EngineMainDesable()
+		}
+		if keyLeftPress && !keyRightPress {
+			s.EngineLeft()
+		} else if !keyLeftPress && keyRightPress {
+			s.EngineRight()
+		} else {
+			s.EngineRightDesable()
+		}
+		controlMutex.Unlock()
+
 		renderer.Clear()
+
 		for i := range objectsBG {
 			objectsBG[i].Draw(renderer, s)
 		}
@@ -107,6 +83,6 @@ func main() {
 		}
 
 		renderer.Present()
-		sdl.Delay(5)
+		sdl.Delay(1000 / frameRate)
 	}
 }

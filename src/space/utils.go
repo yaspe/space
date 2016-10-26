@@ -5,6 +5,15 @@ import (
 	"github.com/veandco/go-sdl2/sdl_gfx"
 )
 
+// types
+
+type Vertex struct {
+	x float64
+	y float64
+}
+
+// funcs
+
 func DrawEllipse(radius uint, r, g, b uint8, position *Vertex, renderer *sdl.Renderer) {
 	gfx.FilledCircleRGBA(renderer, int(position.x), int(position.y), int(radius), r, g, b, 0xFF)
 }
