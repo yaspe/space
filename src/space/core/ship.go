@@ -2,8 +2,6 @@ package core
 
 import (
 	"math"
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/sdl_gfx"
 )
 
 type Ship struct {
@@ -15,7 +13,7 @@ func (s *Ship) EngineMain() {
 	s.acceleration.Y = enginePower * math.Sin(s.rotation)
 }
 
-func (s *Ship) EngineMainDesable() {
+func (s *Ship) EngineMainDisable() {
 	s.acceleration.X = 0
 	s.acceleration.Y = 0
 }
@@ -24,7 +22,7 @@ func (s *Ship) EngineLeft() {
 	s.rotation_acc = enginePower / 100
 }
 
-func (s *Ship) EngineLeftDesable() {
+func (s *Ship) EngineLeftDisable() {
 	s.rotation_acc = 0
 }
 
@@ -32,7 +30,7 @@ func (s *Ship) EngineRight() {
 	s.rotation_acc = -enginePower / 100
 }
 
-func (s *Ship) EngineRightDesable() {
+func (s *Ship) EngineRightDisable() {
 	s.rotation_acc = 0
 }
 

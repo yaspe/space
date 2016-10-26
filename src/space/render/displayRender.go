@@ -11,8 +11,8 @@ import (
 const bgStarsCount = 10000
 
 type displayRender struct {
-	frameSizeX uint
-	frameSizeY uint
+	frameSizeX float64
+	frameSizeY float64 // то же жесть какая то
 	
 	window *sdl.Window
 	renderer *sdl.Renderer
@@ -24,13 +24,13 @@ type displayRender struct {
 	bgStars []*bgStar
 }
 
-func InitRender(frameSizeX, frameSizeY uint, ap *core.Vertex) *displayRender {
+func InitRender(frameSizeX, frameSizeY int, ap *core.Vertex) *displayRender {
 	
 	sdl.Init(sdl.INIT_EVERYTHING)
 	
 	dr := &displayRender{
-		frameSizeX: frameSizeX,
-		frameSizeY: frameSizeY,
+		frameSizeX: float64(frameSizeX),
+		frameSizeY: float64(frameSizeY),
 		AlignPosition: ap,
 	}
 	
@@ -53,13 +53,13 @@ func InitRender(frameSizeX, frameSizeY uint, ap *core.Vertex) *displayRender {
 }
 
 func (dr *displayRender) initBGStars() {
-	dr.bgStars = make([]*bgStar, bgStarsCount)
+	//dr.bgStars = make([]*bgStar, bgStarsCount)
 	for i := 0; i <= bgStarsCount; i++ {
 		b := &bgStar{}
-		b.position.X = float64(rand.Intn(dr.frameSizeX))
-		b.position.Y = float64(rand.Intn(dr.frameSizeX))
+		b.position = &core.Vertex{float64(rand.Intn(int(dr.frameSizeX))), float64(rand.Intn(int(dr.frameSizeX)))} // жесть какая то (Слишком много преобразований)
 		b.size = uint(rand.Intn(3)) + 1
-		dr.bgStars[bgStarsCount] = b
+		//dr.bgStars[i] = b
+		dr.bgStars = append(dr.bgStars, b)
 	}
 }
 
@@ -72,6 +72,9 @@ func (dr *displayRender) DrawProcess() {
 		}
 		for _, pl := range *dr.space.GetPlanets() {
 			dr.DrawPlanets(pl)
+		}
+		for _, ship := range *dr.space.GetShips() {
+			dr.DrawShip(ship)
 		}
 		dr.renderer.Present()
 	}

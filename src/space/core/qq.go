@@ -14,9 +14,17 @@ type Vertex struct {
 }
 
 type IShip interface {
-	SetMainEngineValue(uint8)
-	SetEngineLeft(uint8)
-	EngineRight(uint8)
+	Process()
+	ApplyGravity(p *[]*Planet)
+	GetAcceleration() *Vertex
+	GetRotation() float64
+
+	EngineMain()
+	EngineMainDisable()
+	EngineLeft()
+	EngineLeftDisable()
+	EngineRight()
+	EngineRightDisable()
 }
 
 type IDrawObject interface {

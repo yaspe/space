@@ -8,7 +8,7 @@ import (
 	"../core"
 )
 
-func (dr *displayRender) DrawShip(s *core.Ship) {
+func (dr *displayRender) DrawShip(s core.IShip) {
 	const half_size = 32
 	
 	inFramePosition := &core.Vertex{
@@ -19,7 +19,7 @@ func (dr *displayRender) DrawShip(s *core.Ship) {
 	dr.renderer.SetDrawColor(225, 20, 20, 255)
 	
 	const flame_len = 15
-	if s.GetAcceleration().X != 0 || s.GetAcceleration().Y != 0 {
+		if s.GetAcceleration().X != 0 || s.GetAcceleration().Y != 0 {
 		for i := 0; i <= 50; i++ {
 			dr.renderer.DrawLine(
 				int(inFramePosition.X),

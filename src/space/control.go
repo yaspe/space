@@ -37,7 +37,7 @@ func ProcessControls(s *core.Ship) {
 		if keyDownPress {
 			s.EngineMain()
 		} else {
-			s.EngineMainDesable()
+			s.EngineMainDisable()
 		}
 		
 		if keyLeftPress && !keyRightPress {
@@ -45,7 +45,7 @@ func ProcessControls(s *core.Ship) {
 		} else if !keyLeftPress && keyRightPress {
 			s.EngineRight()
 		} else {
-			s.EngineRightDesable()
+			s.EngineRightDisable()
 		}
 	}
 }

@@ -22,30 +22,26 @@ func (f *fisObject) GetPosition() *Vertex {
 }
 
 func (f *fisObject) GetAcceleration() *Vertex {
-	return f.acceleration
+	return &f.acceleration
 }
 
 func (f *fisObject) GetRotation() float64 {
 	return f.rotation
 }
 
-func (o *fisObject) ApplyGravity(s *Ship) {
-	
-	if o.GetMass() == 40000 {
-		return
-	}
-	
-	currPoss := RelalculatePos(o.GetPosition(), s)
+func (f *fisObject) GetMass() float64 {
+	return f.mass
+}
+
+func (o *fisObject) ApplyGravity(p *[]*Planet) {
+
+	currPoss := RelalculatePos(o.GetPosition(), o.GetPosition())
 	o.gravity.X = 0
 	o.gravity.Y = 0
 	
-	for _, obj := range objects {
+	for _, planet := range *p {
 		
-		if obj.GetMass() == 1 {
-			continue
-		}
-		
-		objPoss := RelalculatePos(obj.GetPosition(), s)
+		objPoss := RelalculatePos(planet.GetPosition(), o.GetPosition())
 		
 		distanceX := currPoss.X - objPoss.X
 		distanceY := currPoss.Y - objPoss.Y
@@ -59,7 +55,7 @@ func (o *fisObject) ApplyGravity(s *Ship) {
 			continue
 		}
 		
-		g := G * obj.GetMass() / (distance * distance)
+		g := G * planet.GetMass() / (distance * distance)
 		gx := distanceX * g / distance
 		gy := distanceY * g / distance
 		o.gravity.X += gx
@@ -68,8 +64,6 @@ func (o *fisObject) ApplyGravity(s *Ship) {
 }
 
 func (s *fisObject) Process() {
-	
-	s.ApplyGravity()
 	
 	s.speed.X += s.acceleration.X
 	s.speed.Y += s.acceleration.Y
