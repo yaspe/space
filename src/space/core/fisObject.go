@@ -64,7 +64,7 @@ func (o *fisObject) ApplyGravity(p *[]*Planet) {
 }
 
 func (s *fisObject) Process() {
-	
+
 	s.speed.X += s.acceleration.X
 	s.speed.Y += s.acceleration.Y
 	

@@ -17,14 +17,14 @@ type displayRender struct {
 	window *sdl.Window
 	renderer *sdl.Renderer
 	
-	space core.Space
+	space *core.Space
 	
 	AlignPosition *core.Vertex
 	
 	bgStars []*bgStar
 }
 
-func InitRender(frameSizeX, frameSizeY int, ap *core.Vertex) *displayRender {
+func InitRender(frameSizeX, frameSizeY int, s *core.Space, ap *core.Vertex) *displayRender {
 	
 	sdl.Init(sdl.INIT_EVERYTHING)
 	
@@ -32,6 +32,7 @@ func InitRender(frameSizeX, frameSizeY int, ap *core.Vertex) *displayRender {
 		frameSizeX: float64(frameSizeX),
 		frameSizeY: float64(frameSizeY),
 		AlignPosition: ap,
+		space: s,
 	}
 	
 	dr.window, _ = sdl.CreateWindow(
@@ -64,7 +65,7 @@ func (dr *displayRender) initBGStars() {
 }
 
 func (dr *displayRender) DrawProcess() {
-	ticker := time.NewTicker(time.Microsecond * 100)
+	ticker := time.NewTicker(time.Second / 100)
 	for range ticker.C {
 		dr.renderer.Clear()
 		for _, b := range dr.bgStars {

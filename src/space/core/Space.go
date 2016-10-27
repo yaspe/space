@@ -14,7 +14,7 @@ type Space struct {
 func CreteSpace() *Space {
 	s := new(Space)
 	s.initPlanets()
-	s.ticker = time.NewTicker(time.Millisecond)
+	s.ticker = time.NewTicker(time.Second / 100)
 	go s.runProcess()
 	return s
 }

@@ -23,7 +23,7 @@ func (dr *displayRender) drawBgStar(b *bgStar) {
 	dr.renderer.SetDrawColor(uint8(k), uint8(k), uint8(k), 255)
 	rect := &sdl.Rect{int32(inFramePosition.X), int32(inFramePosition.Y), int32(b.size), int32(b.size)}
 	dr.renderer.DrawRect(rect)
-	dr.renderer.DrawLine(int(inFramePosition.X)-1, int(inFramePosition.Y)-1, int(inFramePosition.Y)+1, int(inFramePosition.Y)+1)
-	dr.renderer.DrawLine(int(inFramePosition.X)+1, int(inFramePosition.Y)-1, int(inFramePosition.Y)-1, int(inFramePosition.Y)+1)
+	dr.renderer.DrawLine(int(inFramePosition.X)-1, int(inFramePosition.Y)-1, int(inFramePosition.X)+1, int(inFramePosition.Y)+1)
+	dr.renderer.DrawLine(int(inFramePosition.X)+1, int(inFramePosition.Y)-1, int(inFramePosition.X)-1, int(inFramePosition.Y)+1)
 	dr.renderer.SetDrawColor(0, 0, 0, 0)
 }
